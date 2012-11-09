@@ -19,8 +19,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
-
-FORMAT = '%(asctime)-15s %(user)-8s %(message)s'
+FORMAT = '%(levelname)s: %(asctime)s: %(message)s'
 logging.basicConfig(format=FORMAT)
 
 AUTO, SELECT, POLL, EPOLL, KQUEUE = xrange(5)
