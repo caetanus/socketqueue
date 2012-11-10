@@ -18,9 +18,6 @@ import socket as _socket
 import logging
 
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
-FORMAT = '%(levelname)s: %(asctime)s: %(message)s'
-logging.basicConfig(format=FORMAT)
 
 AUTO, SELECT, POLL, EPOLL, KQUEUE = xrange(5)
 IN, PRI,  OUT, ERR, HUP = (1 << i for i in xrange(5))
