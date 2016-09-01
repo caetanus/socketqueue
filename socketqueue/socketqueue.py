@@ -90,7 +90,6 @@ class SocketQueue(object):
         
     
     def unregister(self, socket):
-        #print "unregistering socket", socket
         return self.runtime.unregister(socket)
     
     def poll(self, timeout=-1, ignore=[], maxevents=-1, notypes=False):
@@ -112,13 +111,11 @@ class _SocketQueuePoll(object):
                 self._sockets[socket.fileno()] = socket
                 self._revsockets[socket] = socket.fileno()
                 self._poll.register(socket, mode)
-                #print self._sockets
-                #print self._revsockets
             else:
-                print "registering a fd"
                 fd = socket
                 self._sockets[fd] = fd
                 self._revsockets[fd] = fd
+                self._poll.register(fd, mode)
             return SUCCESS
         except:
             return EOF
@@ -130,8 +127,6 @@ class _SocketQueuePoll(object):
             fileno = self._revsockets[socket]
             del self._revsockets[socket]
             del self._sockets[fileno]
-            #print self._sockets
-            #print self._revsockets
             return SUCCESS
         except:
             return EOF  
@@ -244,12 +239,11 @@ class _SocketQueueKQueue(object):
             r = SUCCESS
             
         if mode & ERR and not socket in self._select_err:
-            print "ERR is not available on kqueue"
+            logger.debug("ERR is not available on kqueue")
         return r 
             
             
     def unregister(self, socket):
-        #print "unregistering", socket
         fileno = self.rev_sockets[socket]
         sockets = [i for i  in self._kqueue_events if i.ident == fileno]
         for ke in sockets:
@@ -311,7 +305,6 @@ class _SocketQueueSelect(object):
             
             
     def unregister(self, socket):
-        #print "unregistering", socket
         if socket in self._select_in:
             self._select_in.remove(socket)
         
