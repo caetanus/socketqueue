@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import six
 import os
 import sys
 import unittest
@@ -12,6 +13,7 @@ import socketqueue
 
 
 def get_os():
+
     def get_linux_version():
         return tuple([int(i) for i in platform.uname()[2].split('-')[0].split('.')])
 
@@ -41,7 +43,7 @@ def get_os():
     def get_bsd_version():
         pass
 
-    if sys.platform == 'linux2':
+    if sys.platform in ('linux2', 'linux'):
         return ('linux',) + get_linux_version()
 
     elif sys.platform == 'win32':
@@ -63,7 +65,7 @@ def can_use_epoll():
 class BasicSocketQueueTestCase(unittest.TestCase):
     def test_auto_select(self):
         m = socketqueue.SocketQueue()
-        if sys.platform == 'linux2':
+        if sys.platform in ('linux2', 'linux'):
             if get_os()[1:] > (2, 5, 4):
                 self.assertEqual(m.engine, socketqueue._SocketQueueEPoll)
             else:
@@ -166,7 +168,7 @@ class NotificationTestCaseGeneric(NotificationTestBase):
     def test_if_is_notifying_pipe(self):
         in_, out = os.pipe()
         self.sock_queue.register(in_)
-        os.write(out, "\x00")
+        os.write(out, six.b("\x00"))
         data = self.sock_queue.poll(1)
         self.assertEqual((in_, 1), data[0])
 
@@ -179,7 +181,7 @@ class NotificationTestCaseGeneric(NotificationTestBase):
 
     def test_if_socket_is_notifying_udp(self):
         self.sock_queue.register(self.socket_server_udp)
-        self.socket_udp.sendto("test", self.addr_udp)
+        self.socket_udp.sendto(six.b("test"), self.addr_udp)
         data = self.sock_queue.poll(1)
         self.assertEqual((self.socket_server_udp, 1), data[0])
 
@@ -189,7 +191,7 @@ class NotificationTestCaseGeneric(NotificationTestBase):
         s, a = self.socket_server.accept()
 
         self.sock_queue.register(s)
-        self.socket.send("data")
+        self.socket.send(six.b("data"))
         data = self.sock_queue.poll(1)
         self.assertEqual((s, 1), data[0])
         self.socket.shutdown(socket.SHUT_RDWR)

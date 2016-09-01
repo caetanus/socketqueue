@@ -1,3 +1,5 @@
+*.wpu
+.*.sw*
 *.py[co]
 
 # Packages
