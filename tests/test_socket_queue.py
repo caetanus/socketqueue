@@ -159,7 +159,6 @@ class NotificationTestBase(unittest.TestCase):
 
 class NotificationTestCaseGeneric(NotificationTestBase):
 
-    @unittest.skip('not to be used by tests')
     def _start_sockqueue(self):
         self.sock_queue = socketqueue.SocketQueue()
 
