@@ -1,19 +1,5 @@
+# -*- coding: utf-8 -*-
 
-"""
-  socket queue module
-  author: Marcelo Aires Caetano
-  date: 01 fev 2012, 27 apr 2012
-  email: marcelo@fiveti.com
-
-  this module is used to add a queue for event in io,
-  using epoll on linux, kqueue on bsd and darwin, e poll/select on windows
-  selecting automatically the best method for used platform
-"""
-
-
-
-
-import six
 import select
 import socket as _socket
 import logging
@@ -32,6 +18,8 @@ KQ_FILTER_WRITE = -2
 SUCCESS = 0
 EOF = ~0
 
+
+__all__ = ["SocketQueue"]
 
 class SocketQueue(object):
 

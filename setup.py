@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
         name='socketqueue',
-        version='0.1.8',
+        version='0.1.9',
         author='Marcelo Aires Caetano',
         author_email='marcelo@fiveti.com',
         license='BSD',
